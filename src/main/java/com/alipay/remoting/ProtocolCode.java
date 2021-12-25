@@ -21,6 +21,7 @@ import java.util.Arrays;
 /**
  * Protocol code definition, you can define your own protocol code in byte array {@link ProtocolCode#version}
  * We suggest to use just one byte for simplicity.
+ * 非枚举类，唯一性保证方法：在 {@link ProtocolManager#registerProtocol(Protocol, ProtocolCode)} 中如果注册相同version的协议，直接抛运行时异常
  *
  * @author tsui
  * @version $Id: ProtocolCode.java, v 0.1 2018-03-27 17:23 tsui Exp $

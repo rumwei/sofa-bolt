@@ -42,6 +42,7 @@ public class ProtocolManager {
             throw new RuntimeException("Protocol: " + protocol + " and protocol code:"
                                        + protocolCode + " should not be null!");
         }
+        //保证不会有不同协议使用了相同的version，或者相同协议的重复注册
         Protocol exists = ProtocolManager.protocols.putIfAbsent(protocolCode, protocol);
         if (exists != null) {
             throw new RuntimeException("Protocol for code: " + protocolCode + " already exists!");

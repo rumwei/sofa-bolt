@@ -25,6 +25,8 @@ import com.alipay.remoting.rpc.common.CONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.DISCONNECTEventProcessor;
 import com.alipay.remoting.rpc.common.SimpleServerUserProcessor;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * a demo for rpc server, you can just run the main method to start a server
  *
@@ -60,7 +62,8 @@ public class RpcServerDemoByMain {
         // server.getRpcServer().stop();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         new RpcServerDemoByMain();
+        TimeUnit.HOURS.sleep(1);
     }
 }

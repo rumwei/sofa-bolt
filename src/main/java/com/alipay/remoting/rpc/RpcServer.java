@@ -265,19 +265,61 @@ public class RpcServer extends AbstractRemotingServer {
         Integer tcpSoRcvBuf = option(BoltGenericOption.TCP_SO_RCVBUF);
 
         this.bootstrap = new ServerBootstrap();
+        /**
+         * option与childoption:
+         *
+         * The parameters that we set using ServerBootStrap.option apply to the ChannelConfig of a newly created
+         * ServerChannel, i.e., the server socket which listens for and accepts the client connections. These
+         * options will be set on the Server Channel when bind() or connect() method is called. This channel is
+         * one per server.
+         *
+         * And the ServerBootStrap.childOption applies to to a channel's channelConfig which gets created once
+         * the serverChannel accepts a client connection. This channel is per client (or per client socket).
+         *
+         * So ServerBootStrap.option parameters apply to the server socket (Server channel) that is listening
+         * for connections and ServerBootStrap.childOption parameters apply to the socket that gets created once
+         * the connection is accepted by the server socket.
+         * */
         this.bootstrap
             .group(bossGroup, workerGroup)
             .channel(NettyEventLoopUtil.getServerSocketChannelClass())
+            /*
+            * 对应TCP/IP协议listen函数中的backlog参数，用来初始化服务器可连接队列大小。
+            * 服务器端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，多个客户端来的时候，服务端将不能处理的客户端
+            * 连接请求放在队列中等待处理，backlog参数指定了队列的大小
+            * */
             .option(ChannelOption.SO_BACKLOG, ConfigManager.tcp_so_backlog())
+            /*
+            * 对应于套接字选项中的SO_REUSEADDR，这个参数表示允许重复使用本地地址和端口
+            * */
             .option(ChannelOption.SO_REUSEADDR, ConfigManager.tcp_so_reuseaddr())
+            /*
+            * 对应于套接字选项中的TCP_NODELAY,该参数的使用与Nagle算法有关
+            * Nagle算法是将小的数据包组装为更大的帧然后进行发送，而不是输入一次发送一次,因此在数据包不足的时候会等待其他数据的到了，
+            * 组装成大的数据包进行发送，虽然该方式有效提高网络的有效负载，但是却造成了延时，而该参数的作用就是禁止使用Nagle算法，使
+            * 用于小数据即时传输，于TCP_NODELAY相对应的是TCP_CORK，该选项是需要等到发送的数据量最大的时候，一次性发送数据，适用
+            * 于文件传输。
+            * */
             .childOption(ChannelOption.TCP_NODELAY, ConfigManager.tcp_nodelay())
             .childOption(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive())
-            .childOption(ChannelOption.SO_SNDBUF,
-                tcpSoSndBuf != null ? tcpSoSndBuf : ConfigManager.tcp_so_sndbuf())
-            .childOption(ChannelOption.SO_RCVBUF,
-                tcpSoRcvBuf != null ? tcpSoRcvBuf : ConfigManager.tcp_so_rcvbuf());
+            /*
+            * 对应于套接字选项中的SO_SNDBUF，对应发送缓冲区大小设置
+            * */
+            .childOption(ChannelOption.SO_SNDBUF, tcpSoSndBuf != null ? tcpSoSndBuf : ConfigManager.tcp_so_sndbuf())
+            /*
+             * 对应于套接字选项中的SO_RCVBUF，对应接收缓冲区大小设置
+             * */
+            .childOption(ChannelOption.SO_RCVBUF, tcpSoRcvBuf != null ? tcpSoRcvBuf : ConfigManager.tcp_so_rcvbuf());
 
         // set write buffer water mark
+        /*
+        * 设置Netty中写缓冲区水位线，单位为byte字节
+        * Netty中通过水位线来标识用户当前通道的消息堆积情况。当buffer的大小超过高水位线的时候对应channel的isWritable就会变成false，
+        * 当buffer的大小低于低水位线的时候，isWritable就会变成true。所以每次调用channel.write(...)方法前应该判断isWritable，如果
+        * 是false就不要再写数据了。
+        * 上面提到的buffer，是ChannelOutboundBuffer，是Netty等待写入系统内核缓冲区的消息队列。ChannelOutboundBuffer本身是无界的，
+        * 所以用的时候要注意。
+        * */
         initWriteBufferWaterMark();
 
         // init byte buf allocator
