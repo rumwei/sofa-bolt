@@ -19,7 +19,7 @@ package com.alipay.remoting;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @author chengyi (mark.lx@antfin.com) 2018-11-05 14:43
+ * 封装了启动标识isStarted的原子操作
  */
 public abstract class AbstractLifeCycle implements LifeCycle {
 
@@ -48,6 +48,7 @@ public abstract class AbstractLifeCycle implements LifeCycle {
 
     /**
      * ensure the component has been startup before providing service.
+     * gw - 一个用于断言的方法，避免了写if语句
      */
     protected void ensureStarted() {
         if (!isStarted()) {

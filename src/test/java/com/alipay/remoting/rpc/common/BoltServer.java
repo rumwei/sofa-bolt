@@ -51,12 +51,12 @@ public class BoltServer {
     }
 
     public boolean start() {
-        this.server.start();
+        this.server.startup();
         return true;
     }
 
     public void stop() {
-        this.server.stop();
+        this.server.shutdown();
     }
 
     public RpcServer getRpcServer() {

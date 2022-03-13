@@ -31,29 +31,29 @@ public class RemotingServerTest {
     @Test
     public void testStartRepeatedly() {
         RpcServer rpcServer = new RpcServer(1111);
-        rpcServer.start();
+        rpcServer.startup();
 
         try {
-            rpcServer.start();
+            rpcServer.startup();
             Assert.fail("Should not reach here!");
         } catch (Exception e) {
             // expect IllegalStateException
         }
-        rpcServer.stop();
+        rpcServer.shutdown();
     }
 
     @Test
     public void testStopRepeatedly() {
         RpcServer rpcServer = new RpcServer(1111);
         try {
-            rpcServer.start();
+            rpcServer.startup();
         } catch (Exception e) {
             Assert.fail("Should not reach here!");
             e.printStackTrace();
         }
-        rpcServer.stop();
+        rpcServer.shutdown();
         try {
-            rpcServer.stop();
+            rpcServer.shutdown();
             Assert.fail("Should not reach here!");
         } catch (Exception e) {
             // expect IllegalStateException

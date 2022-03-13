@@ -87,7 +87,7 @@ public class BadServerIpTest {
                 }
 
             });
-            server.start();
+            server.startup();
         }
     }
 

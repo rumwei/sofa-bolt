@@ -58,7 +58,7 @@ public class RpcServerTest {
         // 1. start a rpc server successfully
         RpcServer rpcServer1 = new RpcServer(1111, false, syncStop);
         try {
-            rpcServer1.start();
+            rpcServer1.startup();
         } catch (Exception e) {
             logger.warn("start fail");
             Assert.fail("Should not reach here");
@@ -68,7 +68,7 @@ public class RpcServerTest {
         // 2. start a rpc server with the same port number failed
         RpcServer rpcServer2 = new RpcServer(1111, false, syncStop);
         try {
-            rpcServer2.start();
+            rpcServer2.startup();
             Assert.fail("Should not reach here");
             logger.warn("start success");
         } catch (Exception e) {
@@ -77,14 +77,14 @@ public class RpcServerTest {
 
         // 3. stop the first rpc server successfully
         try {
-            rpcServer1.stop();
+            rpcServer1.shutdown();
         } catch (IllegalStateException e) {
             Assert.fail("Should not reach here");
         }
 
         // 4. stop the second rpc server failed, for if start failed, stop method will be called automatically
         try {
-            rpcServer2.stop();
+            rpcServer2.shutdown();
             Assert.fail("Should not reach here");
         } catch (Exception e) {
             // expect

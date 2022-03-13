@@ -22,10 +22,7 @@ import com.alipay.remoting.config.BoltOption;
 import com.alipay.remoting.config.BoltOptions;
 import com.alipay.remoting.config.BoltServerOption;
 import com.alipay.remoting.config.Configuration;
-import com.alipay.remoting.config.ConfigurableInstance;
-import com.alipay.remoting.config.configs.ConfigContainer;
-import com.alipay.remoting.config.configs.DefaultConfigContainer;
-import com.alipay.remoting.config.switches.GlobalSwitch;
+import com.alipay.remoting.log.LogPrefix;
 import org.slf4j.Logger;
 
 import com.alipay.remoting.log.BoltLoggerFactory;
@@ -36,17 +33,14 @@ import com.alipay.remoting.log.BoltLoggerFactory;
  * @author jiangping
  * @version $Id: AbstractRemotingServer.java, v 0.1 2015-9-5 PM7:37:48 tao Exp $
  */
-public abstract class AbstractRemotingServer extends AbstractLifeCycle implements RemotingServer,
-                                                                      ConfigurableInstance {
+public abstract class AbstractRemotingServer extends AbstractLifeCycle implements RemotingServer {
 
     private static final Logger   logger = BoltLoggerFactory.getLogger("CommonDefault");
 
     private String                ip;
     private int                   port;
 
-    private final BoltOptions     options;
-    private final GlobalSwitch    globalSwitch;
-    private final ConfigContainer configContainer;
+    private final BoltOptions     options; //保持Server可选项，底层基于ConcurrentHashMap
 
     public AbstractRemotingServer(int port) {
         this(new InetSocketAddress(port).getAddress().getHostAddress(), port);
@@ -61,42 +55,21 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
         this.port = port;
 
         this.options = new BoltOptions();
-        this.globalSwitch = new GlobalSwitch();
-        this.configContainer = new DefaultConfigContainer();
-    }
-
-    @Override
-    @Deprecated
-    public void init() {
-        // Do not call this method, it will be removed in the next version
-    }
-
-    @Override
-    @Deprecated
-    public boolean start() {
-        startup();
-        return true;
-    }
-
-    @Override
-    @Deprecated
-    public boolean stop() {
-        shutdown();
-        return true;
     }
 
     @Override
     public void startup() throws LifeCycleException {
-        super.startup();
+        super.startup(); //将启动标识置为true，该操作是原子的，因此保证了下方的代码最多只会有一个线程能走到
 
         try {
-            doInit();
+            //该try块中的方法均为抽象方法，由子类实现，给子类留口，便于子类的扩展  相当于一个启动代码的骨架
 
-            logger.warn("Prepare to start server on port {} ", port);
+            doInit();
+            logger.warn(LogPrefix.SERVER_START + "Init finished. Prepare to start server on ip={}, port={} ", ip, port);
             if (doStart()) {
-                logger.warn("Server started on port {}", port);
+                logger.warn(LogPrefix.SERVER_START + "Server started on port {}", port);
             } else {
-                logger.warn("Failed starting server on port {}", port);
+                logger.warn(LogPrefix.SERVER_START + "Failed starting server on port {}", port);
                 throw new LifeCycleException("Failed starting server on port: " + port);
             }
         } catch (Throwable t) {
@@ -150,30 +123,15 @@ public abstract class AbstractRemotingServer extends AbstractLifeCycle implement
         return this;
     }
 
-    @Override
-    @Deprecated
-    public ConfigContainer conf() {
-        return this.configContainer;
-    }
-
-    @Override
-    @Deprecated
-    public GlobalSwitch switches() {
-        return this.globalSwitch;
-    }
-
-    @Override
     public void initWriteBufferWaterMark(int low, int high) {
         option(BoltServerOption.NETTY_BUFFER_LOW_WATER_MARK, low);
         option(BoltServerOption.NETTY_BUFFER_HIGH_WATER_MARK, high);
     }
 
-    @Override
     public int netty_buffer_low_watermark() {
         return option(BoltServerOption.NETTY_BUFFER_LOW_WATER_MARK);
     }
 
-    @Override
     public int netty_buffer_high_watermark() {
         return option(BoltServerOption.NETTY_BUFFER_HIGH_WATER_MARK);
     }

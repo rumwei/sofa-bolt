@@ -236,11 +236,11 @@ public class RemotingUtilTest {
                 }
 
             });
-            server.start();
+            server.startup();
         }
 
         public void stopServer() {
-            server.stop();
+            server.shutdown();
         }
     }
 

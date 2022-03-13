@@ -27,42 +27,20 @@ import com.alipay.remoting.rpc.protocol.UserProcessor;
 public interface RemotingServer extends Configuration, LifeCycle {
 
     /**
-     * init the server
-     */
-    @Deprecated
-    void init();
-
-    /**
-     * Start the server. Use startup() instead.
-     */
-    @Deprecated
-    boolean start();
-
-    /**
-     * Stop the server. Use shutdown() instead.
-     *
-     * Remoting server can not be used any more after stop.
-     * If you need, you should destroy it, and instantiate another one.
-     */
-    @Deprecated
-    boolean stop();
-
-    /**
      * Get the ip of the server.
-     *
      * @return ip
      */
     String ip();
 
     /**
      * Get the port of the server.
-     *
      * @return listened port
      */
     int port();
 
     /**
      * Register processor for command with the command code.
+     * gw-通过protocolCode找到对应的protocol，再将commandCode和processor注册到protocol.CommandHandler中去
      *
      * @param protocolCode protocol code
      * @param commandCode command code
@@ -73,6 +51,7 @@ public interface RemotingServer extends Configuration, LifeCycle {
 
     /**
      * Register default executor service for server.
+     * gw-通过protocolCode找到对应的protocol，再将executor注册到protocol.CommandHandler中去
      *
      * @param protocolCode protocol code
      * @param executor the executor service for the protocol code
@@ -81,9 +60,7 @@ public interface RemotingServer extends Configuration, LifeCycle {
 
     /**
      * Register user processor.
-     *
      * @param processor user processor which can be a single-interest processor or a multi-interest processor
      */
     void registerUserProcessor(UserProcessor<?> processor);
-
 }

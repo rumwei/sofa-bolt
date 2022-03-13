@@ -18,6 +18,7 @@ package com.alipay.remoting.config;
 
 /**
  * The base implementation class of the configuration item.
+ * gw-加强版的key，和key的区别在于带默认值
  *
  * @author chengyi (mark.lx@antfin.com) 2018-11-06 17:25
  */

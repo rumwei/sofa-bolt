@@ -25,7 +25,7 @@ public interface Configuration {
 
     /**
      * Get the option value.
-     *
+     * BoltOption就是一个带默认值的加强版key
      * @param option target option
      * @return BoltOption
      */
