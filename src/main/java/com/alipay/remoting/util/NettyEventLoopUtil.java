@@ -20,6 +20,8 @@ import java.util.concurrent.ThreadFactory;
 
 import com.alipay.remoting.config.ConfigManager;
 
+import com.alipay.remoting.log.BoltLoggerFactory;
+import com.alipay.remoting.log.LogPrefix;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
@@ -33,6 +35,7 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
 
 /**
  * Utils for netty EventLoop
@@ -41,6 +44,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @version $Id: NettyEventLoopUtil.java, v 1.5 2018-05-28 14:07 YANGLiiN $
  */
 public class NettyEventLoopUtil {
+
+    private static final Logger logger = BoltLoggerFactory.getLogger(NettyEventLoopUtil.class);
 
     /** check whether epoll enabled, and it would not be changed during runtime. */
     private static boolean epollEnabled = ConfigManager.netty_epoll() && Epoll.isAvailable();
@@ -53,6 +58,7 @@ public class NettyEventLoopUtil {
      * @return an EventLoopGroup suitable for the current platform
      */
     public static EventLoopGroup newEventLoopGroup(int nThreads, ThreadFactory threadFactory) {
+        logger.info("{} epoll using is {}", LogPrefix.SERVER_START, epollEnabled);
         return epollEnabled ? new EpollEventLoopGroup(nThreads, threadFactory)
             : new NioEventLoopGroup(nThreads, threadFactory);
     }

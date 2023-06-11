@@ -24,21 +24,17 @@ import com.alipay.remoting.exception.SerializationException;
 
 /**
  * Remoting command.
- * 
- * @author jiangping
  * @version $Id: RemotingCommand.java, v 0.1 2015-12-11 PM10:17:11 tao Exp $
  */
 public interface RemotingCommand extends Serializable {
     /**
      * Get the code of the protocol that this command belongs to
-     *
      * @return protocol code
      */
     ProtocolCode getProtocolCode();
 
     /**
      * Get the command code for this command
-     *
      * @return command code
      */
     CommandCode getCmdCode();

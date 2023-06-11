@@ -23,7 +23,6 @@ import com.alipay.remoting.rpc.exception.InvokeTimeoutException;
 /**
  * The future for response.
  * 
- * @author jiangping
  * @version $Id: ResponseFuture.java, v 0.1 2015-10-3 PM5:07:05 tao Exp $
  */
 public class RpcResponseFuture {

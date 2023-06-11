@@ -122,7 +122,7 @@ public class RpcRequestProcessor extends AbstractRemotingProcessor<RpcRequestCom
 
         cmd.setBeforeEnterQueueTime(System.nanoTime());
         // use the final executor dispatch process task
-        executor.execute(new ProcessTask(ctx, cmd));
+        executor.execute(new ProcessTask(ctx, cmd)); //这里会触发下方doProcess方法的调用
     }
 
     /**

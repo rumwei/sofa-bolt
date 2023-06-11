@@ -16,13 +16,14 @@
  */
 package com.alipay.remoting;
 
+import com.alipay.remoting.rpc.RpcServer;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
  * Manager of all protocols
  *
- * @author tsui
  * @version $Id: ProtocolManager.java, v 0.1 2018-03-27 15:18 tsui Exp $
  */
 public class ProtocolManager {
@@ -33,6 +34,9 @@ public class ProtocolManager {
         return protocols.get(protocolCode);
     }
 
+    /**
+     * 在{@link RpcServer#startup()}中会触发protocol的初始化注册
+     */
     public static void registerProtocol(Protocol protocol, byte... protocolCodeBytes) {
         registerProtocol(protocol, ProtocolCode.fromBytes(protocolCodeBytes));
     }

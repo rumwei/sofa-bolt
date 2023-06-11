@@ -24,7 +24,6 @@ import io.netty.channel.ChannelHandlerContext;
 /**
  * Encode command.
  * 
- * @author jiangping
  * @version $Id: CommandEncoder.java, v 0.1 Mar 10, 2016 11:33:02 AM jiangping Exp $
  */
 public interface CommandEncoder {

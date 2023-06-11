@@ -176,8 +176,10 @@ public abstract class RpcRemoting extends BaseRemoting {
                              final InvokeContext invokeContext, final int timeoutMillis)
                                                                                         throws RemotingException,
                                                                                         InterruptedException {
+        //这里会完成请求的序列化
         RemotingCommand requestCommand = toRemotingCommand(request, conn, invokeContext,
             timeoutMillis);
+        //会保存本端诸如ip等的信息到InvokeContext中
         preProcessInvokeContext(invokeContext, requestCommand, conn);
         ResponseCommand responseCommand = (ResponseCommand) super.invokeSync(conn, requestCommand,
             timeoutMillis);

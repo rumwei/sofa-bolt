@@ -42,6 +42,7 @@ public abstract class RpcCommand implements RemotingCommand {
 
     /**
      * Code which stands for the command.
+     * 服务端根据该cmdCode决定如何处理该请求
      */
     private CommandCode       cmdCode;
     /* command version */
@@ -66,7 +67,7 @@ public abstract class RpcCommand implements RemotingCommand {
     /** Header is used for transparent transmission. */
     private byte[]            header;
     /** The bytes format of the content of the command. */
-    private byte[]            content;
+    private byte[]            content; //request对象和response对象，序列化后最终会保存到这里，或者从这里进行反序列化
     /** invoke context of each rpc command. */
     private InvokeContext     invokeContext;
 

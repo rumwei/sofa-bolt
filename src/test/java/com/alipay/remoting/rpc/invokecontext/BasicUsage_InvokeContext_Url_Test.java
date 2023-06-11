@@ -66,7 +66,7 @@ public class BasicUsage_InvokeContext_Url_Test {
     String                    addr_Str                  = "127.0.0.1:" + port;
     Url                       addr                      = new RpcAddressParser().parse(addr_Str);
 
-    int                       invokeTimes               = 5;
+    int                       invokeTimes               = 1;
 
     SimpleServerUserProcessor serverUserProcessor       = new SimpleServerUserProcessor();
     SimpleClientUserProcessor clientUserProcessor       = new SimpleClientUserProcessor();

@@ -71,7 +71,7 @@ public abstract class AbstractRemotingProcessor<T extends RemotingCommand> imple
 
     /**
      * Do the process.
-     * 
+     * 下方process中新起的线程中，会执行该方法
      * @param ctx RemotingContext
      * @param msg T
      */

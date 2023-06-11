@@ -80,12 +80,11 @@ import io.netty.handler.timeout.IdleStateHandler;
 public class RpcServer extends AbstractRemotingServer {
 
     /** logger */
-    private static final Logger                         logger                  = BoltLoggerFactory
-                                                                                    .getLogger("RpcRemoting");
-    /** server bootstrap */
+    private static final Logger                         logger                  = BoltLoggerFactory.getLogger("RpcRemoting");
+    /** netty server bootstrap */
     private ServerBootstrap                             bootstrap;
 
-    /** channelFuture */
+    /** netty channelFuture */
     private ChannelFuture                               channelFuture;
 
     /** connection event handler */
@@ -95,8 +94,7 @@ public class RpcServer extends AbstractRemotingServer {
     private ConnectionEventListener                     connectionEventListener = new ConnectionEventListener();
 
     /** user processors of rpc server */
-    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors          = new ConcurrentHashMap<String, UserProcessor<?>>(
-                                                                                    4);
+    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors          = new ConcurrentHashMap<String, UserProcessor<?>>(4);
 
     /** boss event loop group, boss group should not be daemon, need shutdown manually*/
     private final EventLoopGroup                        bossGroup               = NettyEventLoopUtil
@@ -108,9 +106,7 @@ public class RpcServer extends AbstractRemotingServer {
     /** worker event loop group. Reuse I/O worker threads between rpc servers. */
     private static final EventLoopGroup                 workerGroup             = NettyEventLoopUtil
                                                                                     .newEventLoopGroup(
-                                                                                        Runtime
-                                                                                            .getRuntime()
-                                                                                            .availableProcessors() * 2,
+                                                                                        Runtime.getRuntime().availableProcessors() * 2,
                                                                                         new NamedThreadFactory(
                                                                                             "Rpc-netty-server-worker",
                                                                                             true));

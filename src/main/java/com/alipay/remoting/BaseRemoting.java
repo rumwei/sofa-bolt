@@ -18,6 +18,7 @@ package com.alipay.remoting;
 
 import java.util.concurrent.TimeUnit;
 
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 
 import com.alipay.remoting.exception.RemotingException;
@@ -31,6 +32,14 @@ import io.netty.util.TimerTask;
 
 /**
  * Base remoting capability.
+ * 在该类中定义了最为关键的
+ * - {@link #invokeSync(Connection, RemotingCommand, int)}
+ * - {@link #invokeWithFuture(Connection, RemotingCommand, int)}
+ * - {@link #oneway(Connection, RemotingCommand)}
+ * - {@link #invokeWithCallback(Connection, RemotingCommand, InvokeCallback, int)}
+ * 这四类基础调用能力
+ *
+ * 子类RpcRemoting类则对以上四类基础调用能力进行了入参的扩展
  * 
  * @author jiangping
  * @version $Id: BaseRemoting.java, v 0.1 Mar 4, 2016 12:09:56 AM tao Exp $
@@ -63,8 +72,7 @@ public abstract class BaseRemoting {
         int remainingTime = remainingTime(request, timeoutMillis);
         if (remainingTime <= ABANDONING_REQUEST_THRESHOLD) {
             // already timeout
-            LOGGER
-                .warn(
+            LOGGER.warn(
                     "already timeout before writing to the network, requestId: {}, remoting address: {}",
                     request.getId(),
                     conn.getUrl() != null ? conn.getUrl() : RemotingUtil.parseRemoteAddress(conn
@@ -189,6 +197,10 @@ public abstract class BaseRemoting {
 
     /**
      * Invocation with future returned.
+     * 这里往Future中设置response时，只处理了超时和异常的情况，正常返回的情况在{@link com.alipay.remoting.rpc.protocol.RpcResponseProcessor#doProcess(RemotingContext, RemotingCommand)}中进行处理
+     * 暂时还不知道为啥不在这里处理。
+     * RpcResponseProcessor的介入入口在{@link com.alipay.remoting.rpc.RpcHandler#channelRead(ChannelHandlerContext, Object)},
+     * 其中在protocol.CommandHandler的初始化逻辑{@link com.alipay.remoting.rpc.protocol.RpcCommandHandler}中，注册了RpcResponseProcessor
      * 
      * @param conn
      * @param request

@@ -41,6 +41,9 @@ public class BoltGenericOption<T> extends BoltOption<T> {
 
     public static final BoltOption<Integer>                     TCP_SO_RCVBUF                  = valueOf("bolt.tcp.so.rcvbuf");
 
+    /**
+     * 表示的是某线程分配给IO操作所占的时间比，用来控制EventLoop分配给IO的时间和处理Task的时间比例
+     * */
     public static final BoltOption<Integer>                     NETTY_IO_RATIO                 = valueOf(
                                                                                                    "bolt.netty.io.ratio",
                                                                                                    70);
@@ -48,9 +51,15 @@ public class BoltGenericOption<T> extends BoltOption<T> {
                                                                                                    "bolt.netty.buffer.pooled",
                                                                                                    true);
 
+    /**
+     * 控制Netty的高水位线，当Netty缓存超过该值(此处默认64k)时，channel将被置为不可写状态
+    * */
     public static final BoltOption<Integer>                     NETTY_BUFFER_HIGH_WATER_MARK   = valueOf(
                                                                                                    "bolt.netty.buffer.high.watermark",
                                                                                                    64 * 1024);
+    /**
+     * 控制Netty的低水位线，当Netty缓存低于该值(此处默认32k)时，channel将恢复为可写状态
+     * */
     public static final BoltOption<Integer>                     NETTY_BUFFER_LOW_WATER_MARK    = valueOf(
                                                                                                    "bolt.netty.buffer.low.watermark",
                                                                                                    32 * 1024);

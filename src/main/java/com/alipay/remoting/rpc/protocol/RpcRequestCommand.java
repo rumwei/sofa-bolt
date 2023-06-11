@@ -30,8 +30,6 @@ import com.alipay.remoting.util.IDGenerator;
 
 /**
  * Request command for Rpc.
- * 
- * @author jiangping
  * @version $Id: RpcRequestCommand.java, v 0.1 2015-9-25 PM2:13:35 tao Exp $
  */
 public class RpcRequestCommand extends RequestCommand {

@@ -27,8 +27,6 @@ import com.caucho.hessian.io.SerializerFactory;
 
 /**
  * Hessian2 serializer.
- * 
- * @author jiangping
  * @version $Id: HessianSerializer.java, v 0.1 2015-10-4 PM9:51:55 tao Exp $
  */
 public class HessianSerializer implements Serializer {

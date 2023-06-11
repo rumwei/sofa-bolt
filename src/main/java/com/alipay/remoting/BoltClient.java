@@ -29,6 +29,8 @@ import java.util.Map;
 
 /**
  * Bolt client interface.
+ * 约束client的通用行为，{@link RpcClient}实现了本接口，但其中的{@link RpcClient#oneway(Url, Object)}等最终是通过
+ * {@link RpcClient#rpcRemoting}来实现的。利用的组合而非继承的设计。
  *
  * @author chengyi (mark.lx@antfin.com) 2018-11-07 11:56
  */

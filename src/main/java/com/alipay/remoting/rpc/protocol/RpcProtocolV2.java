@@ -62,7 +62,6 @@ import com.alipay.remoting.rpc.RpcCommandFactory;
  * +------------------------------------------------------------------------------------------------+
  * respstatus: response status
  * 
- * @author jiangping
  * @version $Id: RpcProtocolV2.java, v 0.1 2017-05-27 PM7:04:04 tao Exp $
  */
 public class RpcProtocolV2 implements Protocol {
@@ -76,10 +75,11 @@ public class RpcProtocolV2 implements Protocol {
     /**
      * in contrast to protocol v1,
      * one more byte is used as protocol version,
-     * and another one is userd as protocol switch
+     * and another one is used as protocol switch
      */
     private static final int REQUEST_HEADER_LEN  = 22 + 2;
     private static final int RESPONSE_HEADER_LEN = 20 + 2;
+    //该Protocol关联的一组功能对象
     private CommandEncoder   encoder;
     private CommandDecoder   decoder;
     private HeartbeatTrigger heartbeatTrigger;
